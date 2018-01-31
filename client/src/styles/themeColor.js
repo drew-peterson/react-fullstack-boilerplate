@@ -1,5 +1,9 @@
 export const ThemeColor = {
-	main: '#393276',
-	dark: '#0D083B',
-	light: '#837EB1'
+  dark: "#00171F",
+  main: "#003459",
+  light: "#007EA7",
+  blue: "#00A8E8",
+  container: "#F1FAEE",
+  error: "#E63946",
+  white: "#fff"
 };
