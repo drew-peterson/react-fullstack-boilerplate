@@ -10,11 +10,13 @@ const User = mongoose.model("user"); // bring in mongo class
 // generate unqiue indenityfing info
 // turn mongoose model into id
 passport.serializeUser((user, done) => {
+  console.log("serializeUser", user);
   done(null, user.id); // user.id is not _oAuthId --> referring to user._id (mongo id) for specific user
 });
 // id: is the above user.id
 // turn id into mongoose model and attached to req.user
 passport.deserializeUser((id, done) => {
+  console.log("deserializeUser", id);
   User.findById(id).then(user => {
     done(null, user);
   });
@@ -50,6 +52,7 @@ passport.use(
       callbackURL: "/auth/facebook/callback"
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log("facebook", profile);
       const data = {
         _oAuthId: profile.id
         // firstName: profile.name.givenName,

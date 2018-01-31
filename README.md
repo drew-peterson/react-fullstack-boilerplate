@@ -75,21 +75,3 @@ https://github.com/localtunnel/localtunnel
 * dev webhook url: https://weeznog123.localtunnel.me/api/surveys/webhooks
 * to .me is tunnel then goto express route /api/survey/webhooks w/ post...
 * add .sh file to prevent crashing... might need to require premissions to work...
-
-## EXTRA FEATURE TO DO
-
-1. improve survey cards
-   * use pie / bar chart for chard
-   * last responded
-   * styling in general
-2. allow users to delete surveys that have been created
-3. allow users to specific the from field on emails
-4. client side sorting of surveys
-   * date sent
-   * last answer
-   * total vouts
-5. surveys to be created in draft mode...
-   * save draft and come back later...
-6. better email template
-7. add styled-components
-   8 .circle ci

@@ -7,8 +7,6 @@ const keys = require("./config/keys");
 
 // Models
 require("./models/User"); // require mongoose models -- model has to exist first before passport can use it
-require("./models/Survey");
-
 require("./services/passport"); // make sure passport is ran...
 
 mongoose.connect(keys.MONGO_URI);
