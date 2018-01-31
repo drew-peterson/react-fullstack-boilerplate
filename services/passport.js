@@ -1,76 +1,75 @@
 // OAuth
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
-const keys = require('../config/keys');
-const mongoose = require('mongoose');
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
+const keys = require("../config/keys");
+const mongoose = require("mongoose");
 
-const User = mongoose.model('user'); // bring in mongo class
+const User = mongoose.model("user"); // bring in mongo class
 
 // generate unqiue indenityfing info
 // turn mongoose model into id
 passport.serializeUser((user, done) => {
-	done(null, user.id); // user.id is not _oAuthId --> referring to user._id (mongo id) for specific user
+  done(null, user.id); // user.id is not _oAuthId --> referring to user._id (mongo id) for specific user
 });
 // id: is the above user.id
 // turn id into mongoose model and attached to req.user
 passport.deserializeUser((id, done) => {
-	User.findById(id).then(user => {
-		done(null, user);
-	});
+  User.findById(id).then(user => {
+    done(null, user);
+  });
 });
 
 // Google
 // https://developers.google.com/identity/one-tap/web/get-started -- new google login??
 passport.use(
-	new GoogleStrategy(
-		{
-			clientID: keys.googleClientID,
-			clientSecret: keys.googleClientSecret,
-			callbackURL: '/auth/google/callback', // passport as correct domain
-			proxy: true // tell passport to trust proxy and keep https for callback
-		},
-		(accessToken, refreshToken, profile, done) => {
-			newOrExistingUser(profile.id, done);
-		}
-	)
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: "/auth/google/callback", // passport as correct domain
+      proxy: true // tell passport to trust proxy and keep https for callback
+    },
+    (accessToken, refreshToken, profile, done) => {
+      const data = {
+        _oAuthId: profile.id,
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName
+      };
+      newOrExistingUser(data, done);
+    }
+  )
 );
 
 // Facebook
-// passport.use(
-// 	new FacebookStrategy(
-// 		{
-// 			clientID: keys.FACEBOOK_APP_ID,
-// 			clientSecret: keys.FACEBOOK_APP_SECRET,
-// 			callbackURL: '/auth/facebook/callback'
-// 		},
-// 		(accessToken, refreshToken, profile, done) => {}
-// 	)
-// );
-
-// ** PROMISES **
-// function newOrExistingUser(_oAuthId, done) {
-// 	User.findOne({ _oAuthId }).then(existingUser => {
-// 		if (existingUser) {
-// 			done(null, existingUser); // calls passport.serializeUser and passes existingUser as first arg -> user
-// 		} else {
-// 			// create new user...
-// 			new User({ _oAuthId }).save().then(user => {
-// 				done(null, user);
-// 			});
-// 		}
-// 	});
-// }
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: keys.FACEBOOK_APP_ID,
+      clientSecret: keys.FACEBOOK_APP_SECRET,
+      callbackURL: "/auth/facebook/callback"
+    },
+    (accessToken, refreshToken, profile, done) => {
+      const data = {
+        _oAuthId: profile.id
+        // firstName: profile.name.givenName,
+        // lastName: profile.name.familyName
+      };
+      newOrExistingUser(data, done);
+    }
+  )
+);
 
 // ** ES6 async await
-const newOrExistingUser = async (_oAuthId, done) => {
-	const existingUser = await User.findOne({ _oAuthId });
-	if (existingUser) {
-		return done(null, existingUser); // calls passport.serializeUser and passes existingUser as first arg -> user
-	}
-	// the return above will leave function so we dont need else....
-	const user = await new User({ _oAuthId }).save(); // create new user
-	done(null, user);
+const newOrExistingUser = async ({ _oAuthId, firstName, lastName }, done) => {
+  // _oAuthId is the google or facebook id not mongoose...
+  const existingUser = await User.findOne({ _oAuthId });
+  if (existingUser) {
+    return done(null, existingUser); // calls passport.serializeUser and passes existingUser as first arg -> user
+  }
+  // the return above will leave function so we dont need else....
+  const user = await new User({ _oAuthId, firstName, lastName }).save(); // create new user
+  done(null, user);
 };
 
 // JWT
