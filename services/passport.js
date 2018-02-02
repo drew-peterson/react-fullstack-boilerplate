@@ -72,15 +72,15 @@ passport.use(
     try {
       const user = await User.findOne({ email });
       if (!user) {
-        return done(user, false, { err, message: "User not found" });
+        return done(user, false, { message: "User not found" });
       }
 
       user.comparePassword(password, (err, isMatch) => {
         if (err) {
-          return done(err, { err, message: "error during password" });
+          return done(err, { message: "error during password" });
         }
         if (!isMatch) {
-          return done(null, false, { err, message: "password does not match" });
+          return done(null, false, { message: "password does not match" });
         }
         return done(null, user);
       });

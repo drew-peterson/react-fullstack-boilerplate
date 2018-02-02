@@ -1,11 +1,12 @@
 import axios from "axios";
 // import { FETCH_USER, SERVER_ERROR } from "./types";
-import { FETCH_USER } from "./types";
+import { FETCH_USER, CLIENT_ERRORS } from "./types";
 
 export const localSignup = (
   { email, password, firstName, lastName },
   history
 ) => async dispatch => {
+  dispatch({type: CLIENT_ERRORS, payload: null});
   try {
     const res = await axios.post("/auth/localSignup", {
       email,
@@ -23,8 +24,11 @@ export const localSignup = (
       });
       history.push("/");
     }
-  } catch (err) {
-    console.log("signupError", err.response);
+  } catch ({response}) {
+    dispatch({
+      type: CLIENT_ERRORS,
+      payload: response.data
+    })
   }
 };
 
@@ -32,6 +36,7 @@ export const localLogin = (
   { email, password, firstName, lastName },
   history
 ) => async dispatch => {
+  dispatch({type: CLIENT_ERRORS, payload: null}); // reset errors.
   try {
     const res = await axios.post("/auth/localLogin", {
       email,
@@ -47,8 +52,12 @@ export const localLogin = (
       });
       history.push("/");
     }
-  } catch (err) {
-    console.log("signupError", err.response);
+  } catch ({response}) {
+    console.log("signupError", response.data);
+    dispatch({
+      type: CLIENT_ERRORS,
+      payload: {localLogin: response.data.message}
+    })
   }
 };
 

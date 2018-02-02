@@ -6,5 +6,5 @@ import { reducer as reduxForm } from "redux-form";
 export default combineReducers({
   auth: authReducer,
   form: reduxForm,
-  serverErrors: errorsReducer
+  errors: errorsReducer
 });

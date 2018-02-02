@@ -1,9 +1,9 @@
-import { SERVER_ERROR } from '../actions/types';
+import { CLIENT_ERRORS } from '../actions/types';
 
-export default (state = null, action) => {
+export default (state = {}, action) => {
 	switch (action.type) {
-		case SERVER_ERROR:
-			return { ...action.payload };
+		case CLIENT_ERRORS:
+		return { ...action.payload };
 		default:
 			return state;
 	}
