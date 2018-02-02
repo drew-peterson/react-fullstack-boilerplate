@@ -9,6 +9,8 @@ const keys = require("./config/keys");
 require("./models/User"); // require mongoose models -- model has to exist first before passport can use it
 require("./services/passport"); // make sure passport is ran...
 
+const handleErrors = require("./middlewares/errors");
+
 mongoose.connect(keys.MONGO_URI);
 
 const app = express();
@@ -40,6 +42,9 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
+
+app.use(handleErrors.logErrors);
+app.use(handleErrors.clientErrorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);

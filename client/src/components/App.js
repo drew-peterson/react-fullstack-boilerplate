@@ -5,11 +5,12 @@ import { ThemeColor } from "../styles/themeColor";
 import { ThemeProvider } from "styled-components";
 import * as actions from "../actions";
 
-import "../styles/normalize.css";
+// import "../styles/normalize.css";
 
 import Header from "./Header";
 import Landing from "./Landing";
 import Login from "../screens/Login";
+import Signup from "../screens/Signup";
 
 class App extends Component {
   // preferred location for intial ajax request w/ new react
@@ -25,6 +26,7 @@ class App extends Component {
             <Header />
             <Route exact path="/" component={Landing} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
           </div>
         </BrowserRouter>
       </ThemeProvider>

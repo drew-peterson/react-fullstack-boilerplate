@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import LoginForm from "../components/auth/LoginForm";
+import SignupForm from "../components/auth/SignupForm";
 
-class Login extends Component {
+class Signup extends Component {
   render() {
     return (
       <Container>
-        <LoginTitle>Oauth login</LoginTitle>
+        <Title>Oauth Signup</Title>
         <ButtonContainer>
           <Button
             facebook
@@ -31,8 +31,8 @@ class Login extends Component {
           <div className="col s12 m8 offset-m2">
             <div className="card blue-grey darken-1 ">
               <div className="card-content white-text">
-                <span className="card-title">Login</span>
-                <LoginForm />
+                <span className="card-title">Signup</span>
+                <SignupForm />
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@ const Container = styled.div`
   text-align: center;
 `;
 
-const LoginTitle = styled.h1`
+const Title = styled.h1`
   color: ${props => props.theme.dark};
 `;
 
@@ -61,4 +61,4 @@ const Button = styled.a`
   margin-left: ${props => (props.google ? "15px" : 0)};
 `;
 
-export default Login;
+export default Signup;

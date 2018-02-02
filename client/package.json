@@ -9,6 +9,12 @@
     "/auth/facebook": {
       "target": "http://localhost:5000"
     },
+    "/auth/localSignup": {
+      "target": "http://localhost:5000"
+    },
+    "/auth/localLogin": {
+      "target": "http://localhost:5000"
+    },
     "/api/*": {
       "target": "http://localhost:5000"
     }

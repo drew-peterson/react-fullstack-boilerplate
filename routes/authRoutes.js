@@ -1,37 +1,53 @@
 const passport = require("passport");
 
+const passportTypes = require("../services/passportTypes");
+const googleOAuth = passportTypes.googleOAuth;
+const googleOAuthCb = passportTypes.googleOAuthCb;
+const facebookOAuth = passportTypes.facebookOAuth;
+const facebookOAuthCb = passportTypes.facebookOAuthCb;
+const createLocalUser = require("../middlewares/createLocalUser");
+
 module.exports = app => {
-  // GOOGLE
-  app.get(
-    "/auth/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
-  );
-  app.get(
-    "/auth/google/callback",
-    passport.authenticate("google"), // 2nd part of passport --> get user info and pass back to strategy cb
-    (req, res) => {
-      // redirect to specific route after passport strategy is model getting user model
-      res.redirect("/");
-    }
-  );
+  // GOOGLE ------------------------------------------------------
+  app.get("/auth/google", googleOAuth);
 
-  // FACEBOOK;
-  app.get(
-    "/auth/facebook",
-    passport.authenticate("facebook", {
-      scope: ["public_profile", "email"]
-    })
-  );
-  app.get(
-    "/auth/facebook/callback",
-    passport.authenticate("facebook"),
-    (req, res) => {
-      res.redirect("/");
-    }
-  );
+  // redirect to specific route after passport strategy is model getting user model
+  app.get("/auth/google/callback", googleOAuthCb, (req, res) => {
+    res.redirect("/");
+  });
 
-  // passport deserialize attaches mongoose user model to req.user once authorized
+  // FACEBOOK ------------------------------------------------------
+  app.get("/auth/facebook", facebookOAuth);
+
+  app.get("/auth/facebook/callback", facebookOAuthCb, (req, res) => {
+    res.redirect("/");
+  });
+
+  // EMAIL PASSWORD ------------------------------------------------------
+  app.post("/auth/localLogin", (req, res, next) => {
+    passport.authenticate("local", function(err, user, info) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(403).send({ message: info.message });
+      }
+      req.logIn(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+        res.status(200).send({ user: req.user });
+      });
+    })(req, res, next);
+  });
+
+  app.post("/auth/localSignup", createLocalUser, (req, res) => {
+    res.status(200).send({ user: req.user });
+  });
+
+  // OTHER ------------------------------------------------------
   app.get("/api/current_user", (req, res) => {
+    // passport deserialize attaches mongoose user model to req.user once authorized
     res.send(req.user);
   });
 
