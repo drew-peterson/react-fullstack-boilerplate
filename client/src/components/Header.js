@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class Header extends Component {
   renderContent() {
@@ -18,7 +18,10 @@ class Header extends Component {
         ];
       default:
         return [
-          <li key="3">
+          <li key="1">
+            <Link to="/protected">Protected</Link>
+          </li>,
+          <li key="2">
             {/*full http redirect / refresh
 						if ajax then we need to handle auth redux*/}
             <a href="/api/logout">logout</a>
@@ -31,7 +34,7 @@ class Header extends Component {
       <nav>
         <div className="nav-wrapper blue accent-2">
           {/*if user is logged in then home icon redirects to dashboard else lander*/}
-          <Link className="left brand-logo" to={this.props.auth ? "/" : "/"}>
+          <Link className="left brand-logo" to={this.props.auth ? '/' : '/'}>
             Host Legality
           </Link>
           <ul id="nav-mobile" className="right">

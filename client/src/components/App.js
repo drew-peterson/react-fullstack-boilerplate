@@ -1,35 +1,61 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { BrowserRouter, Route } from "react-router-dom";
-import { ThemeColor } from "../styles/themeColor";
-import { ThemeProvider } from "styled-components";
-import * as actions from "../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ThemeColor } from '../styles/themeColor';
+import { ThemeProvider } from 'styled-components';
+import * as actions from '../actions';
 
 // import "../styles/normalize.css";
 
-import Header from "./Header";
-import Landing from "./Landing";
-import Login from "../screens/Login";
-import Signup from "../screens/Signup";
+import Header from './Header';
+import Landing from './Landing';
+import Login from '../screens/Login';
+import Signup from '../screens/Signup';
+import ResetPassword from '../screens/ResetPassword';
+import requireAuth from './auth/require_auth';
 
 class App extends Component {
   // preferred location for intial ajax request w/ new react
   componentDidMount() {
-    this.props.fetchUser();
+    this.props.fetchUser(); // check auth...
   }
+
   render() {
     return (
       <ThemeProvider theme={ThemeColor}>
-        <BrowserRouter>
-          {/* <div className="container"> */}
+        <Router>
           <div>
             <Header />
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/protected" component={requireAuth(Protected)} />
+              <Route path="/resetPassword/:token" component={ResetPassword} />
+              <Route component={NoMatch} />
+            </Switch>
           </div>
-        </BrowserRouter>
+        </Router>
       </ThemeProvider>
+    );
+  }
+}
+
+// If no route is found default here...
+const NoMatch = ({ location }) => (
+  <div>
+    <h3>
+      No match for <code>{location.pathname}</code>
+    </h3>
+  </div>
+);
+
+class Protected extends Component {
+  render() {
+    return (
+      <div>
+        <h3>Protected Route here...</h3>
+      </div>
     );
   }
 }

@@ -3,18 +3,15 @@ const { Schema } = mongoose;
 const bcrypt = require("bcrypt-nodejs");
 
 const userSchema = new Schema({
-  _oAuthId: {
-    type: String
-  },
+  _oAuthId: String,
+  firstName: String,
+  lastName: String,
+  password: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   credits: {
     type: Number,
     default: 0
-  },
-  firstName: {
-    type: String
-  },
-  lastName: {
-    type: String
   },
   email: {
     type: String,
@@ -28,9 +25,6 @@ const userSchema = new Schema({
       message: "{VALUE} is not a valid email address"
     }
   },
-  password: {
-    type: String
-  }
 });
 
 //On save hook, encrypt password

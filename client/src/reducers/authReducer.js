@@ -1,4 +1,4 @@
-import { FETCH_USER } from "../actions/types";
+import { FETCH_USER } from '../actions/types';
 
 // return null because if slow internet then the api request to get user might take some time
 // we dont know the return so we give null

@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { Input } from "../common";
-import * as actions from "../../actions";
+import { Input } from '../common';
+import * as actions from '../../actions';
 
 class SignupForm extends Component {
   onFormSubmit(values) {
     const { history, localSignup } = this.props;
-    localSignup(values, history);
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    localSignup(values, history, from);
   }
 
   render() {
@@ -62,7 +63,7 @@ const Form = styled.form`
 `;
 
 SignupForm = reduxForm({
-  form: "signupForm"
+  form: 'signupForm'
 })(SignupForm);
 
 export default connect(null, actions)(withRouter(SignupForm));

@@ -6,6 +6,7 @@ const googleOAuthCb = passportTypes.googleOAuthCb;
 const facebookOAuth = passportTypes.facebookOAuth;
 const facebookOAuthCb = passportTypes.facebookOAuthCb;
 const createLocalUser = require("../middlewares/createLocalUser");
+const password = require("../middlewares/password");
 
 module.exports = app => {
   // GOOGLE ------------------------------------------------------
@@ -56,4 +57,12 @@ module.exports = app => {
     req.logout(); // attached by passport, takes cookie and kills the id
     res.redirect("/");
   });
+
+  app.post('/auth/resetPassword/:token', password.reset, (req, res)=>{
+    console.log('resetPassword', req.body, req.params);
+  })
+  app.post('/auth/forgotPassword', password.forgot, (req, res)=>{
+    console.log('forgotPassword', req.body, req.params);
+  })
+
 };

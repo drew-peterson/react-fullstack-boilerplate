@@ -4,37 +4,32 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import * as actions from '../../actions';
 import { Input } from '../common';
+import * as actions from '../../actions';
 
-class LoginForm extends Component {
-  async onFormSubmit(values) {
-    const { history, localLogin } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-
-    localLogin(values, history, from);
+class ResetPasswordForm extends Component {
+  onFormSubmit(values) {
+    console.log('values', values);
   }
 
   render() {
     const { handleSubmit, errors } = this.props;
-
     return (
       <Form onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
-        <Field
-          component={Input}
-          type="email"
-          name="email"
-          placeholder="Email"
-        />
         <Field
           component={Input}
           type="password"
           name="password"
           placeholder="Password"
         />
+        <Field
+          component={Input}
+          type="password"
+          name="passwordCheck"
+          placeholder="Type password again"
+        />
         <button className="btn" type="submit" name="action">
-          Login
-          <i className="material-icons right">send</i>
+          Reset Password
         </button>
 
         {errors && (
@@ -48,7 +43,13 @@ class LoginForm extends Component {
 }
 
 const Form = styled.form`
-  margin-top: 40px;
+  max-width: 60%;
+  background-color: ${props => props.theme.light};
+  padding: 20px;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 10px;
+  color: white;
 `;
 
 const ErrorsText = styled.p`
@@ -56,12 +57,11 @@ const ErrorsText = styled.p`
   font-size: 20px;
 `;
 
+ResetPasswordForm = reduxForm({
+  form: 'resetPassword'
+})(ResetPasswordForm);
+
 function mapStateToProps({ errors }) {
   return { errors };
 }
-
-LoginForm = reduxForm({
-  form: 'loginForm'
-})(LoginForm);
-
-export default connect(mapStateToProps, actions)(withRouter(LoginForm));
+export default connect(mapStateToProps, actions)(withRouter(ResetPasswordForm));

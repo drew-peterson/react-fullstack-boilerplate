@@ -1,9 +1,12 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import styled from 'styled-components';
 
-import LoginForm from "../components/auth/LoginForm";
+import LoginForm from '../components/auth/LoginForm';
 
 class Login extends Component {
+  authFacebook() {}
+  authGoogle() {}
+
   render() {
     return (
       <Container>
@@ -25,7 +28,7 @@ class Login extends Component {
           </Button>
         </ButtonContainer>
 
-        <hr style={{ marginTop: "20px", marginBottom: "20px" }} />
+        <hr style={{ marginTop: '20px', marginBottom: '20px' }} />
 
         <div className="row">
           <div className="col s12 m8 offset-m2">
@@ -33,6 +36,9 @@ class Login extends Component {
               <div className="card-content white-text">
                 <span className="card-title">Login</span>
                 <LoginForm />
+                <a href="/auth/resetPassword" className="btn">
+                  Reset Password
+                </a>
               </div>
             </div>
           </div>
@@ -58,7 +64,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.a`
-  margin-left: ${props => (props.google ? "15px" : 0)};
+  margin-left: ${props => (props.google ? '15px' : 0)};
 `;
 
 export default Login;
