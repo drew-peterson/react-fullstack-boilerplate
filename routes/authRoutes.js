@@ -1,32 +1,32 @@
-const passport = require("passport");
+const passport = require('passport');
 
-const passportTypes = require("../services/passportTypes");
+const passportTypes = require('../services/passportTypes');
 const googleOAuth = passportTypes.googleOAuth;
 const googleOAuthCb = passportTypes.googleOAuthCb;
 const facebookOAuth = passportTypes.facebookOAuth;
 const facebookOAuthCb = passportTypes.facebookOAuthCb;
-const createLocalUser = require("../middlewares/createLocalUser");
-const password = require("../middlewares/password");
+const createLocalUser = require('../middlewares/createLocalUser');
+const password = require('../middlewares/password');
 
 module.exports = app => {
   // GOOGLE ------------------------------------------------------
-  app.get("/auth/google", googleOAuth);
+  app.get('/auth/google', googleOAuth);
 
   // redirect to specific route after passport strategy is model getting user model
-  app.get("/auth/google/callback", googleOAuthCb, (req, res) => {
-    res.redirect("/");
+  app.get('/auth/google/callback', googleOAuthCb, (req, res) => {
+    res.redirect('/login');
   });
 
   // FACEBOOK ------------------------------------------------------
-  app.get("/auth/facebook", facebookOAuth);
+  app.get('/auth/facebook', facebookOAuth);
 
-  app.get("/auth/facebook/callback", facebookOAuthCb, (req, res) => {
-    res.redirect("/");
+  app.get('/auth/facebook/callback', facebookOAuthCb, (req, res) => {
+    res.redirect('/login');
   });
 
   // EMAIL PASSWORD ------------------------------------------------------
-  app.post("/auth/localLogin", (req, res, next) => {
-    passport.authenticate("local", function(err, user, info) {
+  app.post('/auth/localLogin', (req, res, next) => {
+    passport.authenticate('local', function(err, user, info) {
       if (err) {
         return next(err);
       }
@@ -42,27 +42,29 @@ module.exports = app => {
     })(req, res, next);
   });
 
-  app.post("/auth/localSignup", createLocalUser, (req, res) => {
+  app.post('/auth/localSignup', createLocalUser, (req, res) => {
     res.status(200).send({ user: req.user });
   });
 
   // OTHER ------------------------------------------------------
-  app.get("/api/current_user", (req, res) => {
+  app.get('/api/current_user', (req, res) => {
     // passport deserialize attaches mongoose user model to req.user once authorized
     res.send(req.user);
   });
 
   // logout
-  app.get("/api/logout", (req, res) => {
+  app.get('/api/logout', (req, res) => {
     req.logout(); // attached by passport, takes cookie and kills the id
-    res.redirect("/");
+    res.redirect('/');
   });
 
-  app.post('/auth/resetPassword/:token', password.reset, (req, res)=>{
-    console.log('resetPassword', req.body, req.params);
-  })
-  app.post('/auth/forgotPassword', password.forgot, (req, res)=>{
-    console.log('forgotPassword', req.body, req.params);
-  })
+  app.post('/auth/resetPassword/:token', password.reset, (req, res) => {
+    console.log('RESET COMPLETE....');
+    res.status(200).send({ user: req.user });
+  });
 
+  app.post('/auth/forgotPassword', password.forgot, (req, res) => {
+    console.log('FORGOT PASSWORD...');
+    res.status(200).send('Check Email for password reset link...');
+  });
 };

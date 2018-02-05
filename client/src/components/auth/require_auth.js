@@ -5,10 +5,14 @@ export default function(ComposedComponent) {
   class Authentication extends Component {
     componentWillUpdate(nextProps) {
       if (!nextProps.auth) {
-        nextProps.history.push({
-          pathname: '/login',
-          state: { from: nextProps.location } // used to redirect  after login
-        });
+        localStorage.setItem('from', nextProps.location.pathname);
+        nextProps.history.push('/login');
+
+        // using redux to handle redirect however googleOauth will not work...
+        // nextProps.history.push({
+        //   pathname: '/login',
+        //   state: { from: nextProps.location } // used to redirect  after login
+        // });
       }
     }
 

@@ -4,8 +4,7 @@ import { FETCH_USER, CLIENT_ERRORS } from './types';
 
 export const localSignup = (
   { email, password, firstName, lastName },
-  history,
-  from
+  history
 ) => async dispatch => {
   dispatch({ type: CLIENT_ERRORS, payload: null });
   try {
@@ -23,7 +22,6 @@ export const localSignup = (
         type: FETCH_USER,
         payload: user
       });
-      history.push(from);
     }
   } catch ({ response }) {
     dispatch({
@@ -35,8 +33,7 @@ export const localSignup = (
 
 export const localLogin = (
   { email, password, firstName, lastName },
-  history,
-  from
+  history
 ) => async dispatch => {
   dispatch({ type: CLIENT_ERRORS, payload: null }); // reset errors.
   try {
@@ -52,7 +49,6 @@ export const localLogin = (
         type: FETCH_USER,
         payload: user
       });
-      history.push(from);
     }
   } catch ({ response }) {
     console.log('signupError', response.data);

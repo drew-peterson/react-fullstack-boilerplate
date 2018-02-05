@@ -10,8 +10,10 @@ import * as actions from '../../actions';
 class SignupForm extends Component {
   onFormSubmit(values) {
     const { history, localSignup } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    localSignup(values, history, from);
+    localSignup(values, history);
+
+    // const { from } = this.props.location.state || { from: { pathname: '/' } };
+    // localSignup(values, history, from);
   }
 
   render() {

@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import LoginForm from '../components/auth/LoginForm';
 
 class Login extends Component {
-  authFacebook() {}
-  authGoogle() {}
+  componentWillUpdate(nextProps) {
+    // optional redirect if they went to a protected route without logging in
+    // from is set in require_auth
+    // get auth when app boots up first time or refresh...
+    const { auth, history } = nextProps;
+    const from = localStorage.getItem('from') || '/';
+    if (auth) {
+      history.push(from);
+      localStorage.removeItem('from');
+    }
+  }
 
   render() {
     return (
@@ -66,5 +76,6 @@ const ButtonContainer = styled.div`
 const Button = styled.a`
   margin-left: ${props => (props.google ? '15px' : 0)};
 `;
+const mapStateToProps = ({ auth }) => ({ auth });
 
-export default Login;
+export default connect(mapStateToProps)(Login);

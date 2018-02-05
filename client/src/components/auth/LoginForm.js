@@ -10,9 +10,12 @@ import { Input } from '../common';
 class LoginForm extends Component {
   async onFormSubmit(values) {
     const { history, localLogin } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
 
-    localLogin(values, history, from);
+    localLogin(values, history);
+
+    // redux style of redirect after auth...
+    // const { from } = this.props.location.state || { from: { pathname: '/' } };
+    // localLogin(values, history, from);
   }
 
   render() {

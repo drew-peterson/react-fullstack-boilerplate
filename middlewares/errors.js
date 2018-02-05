@@ -1,6 +1,11 @@
 module.exports = {
   logErrors: (err, req, res, next) => {
-    console.error("log errors", err.stack);
+    console.log('*** SERVER ERROR ***');
+    if (err.stack) {
+      console.error(err.stack);
+    } else {
+      console.error(err);
+    }
     next(err);
   },
   clientErrorHandler: (err, req, res, next) => {
