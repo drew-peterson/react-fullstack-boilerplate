@@ -12,6 +12,7 @@ import Landing from './Landing';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import ResetPassword from '../screens/ResetPassword';
+import ForgotPassword from '../screens/ForgotPassword';
 import requireAuth from './auth/require_auth';
 
 class App extends Component {
@@ -33,6 +34,7 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               <Route path="/protected" component={requireAuth(Protected)} />
               <Route path="/resetPassword/:token" component={ResetPassword} />
+              <Route path="/forgotPassword" component={ForgotPassword} />
               <Route component={NoMatch} />
             </Switch>
           </div>

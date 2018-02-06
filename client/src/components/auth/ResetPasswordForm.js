@@ -8,12 +8,13 @@ import { Input } from '../common';
 import * as actions from '../../actions';
 
 class ResetPasswordForm extends Component {
-  onFormSubmit(values) {
-    console.log('values', values);
+  onFormSubmit({ password }) {
+    const { history, resetPassword, match: { params: { token } } } = this.props;
+    resetPassword(password, token, history);
   }
 
   render() {
-    const { handleSubmit, errors } = this.props;
+    const { handleSubmit, errors, submitting, pristine, invalid } = this.props;
     return (
       <Form onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
         <Field
@@ -21,20 +22,27 @@ class ResetPasswordForm extends Component {
           type="password"
           name="password"
           placeholder="Password"
+          required
         />
         <Field
           component={Input}
           type="password"
           name="passwordCheck"
           placeholder="Type password again"
+          required
         />
-        <button className="btn" type="submit" name="action">
+        <button
+          className="btn"
+          type="submit"
+          name="action"
+          disabled={pristine || submitting || invalid}
+        >
           Reset Password
         </button>
 
         {errors && (
           <ErrorsText className="red-text center-align">
-            {errors.localLogin}
+            {errors.err}
           </ErrorsText>
         )}
       </Form>
@@ -57,8 +65,17 @@ const ErrorsText = styled.p`
   font-size: 20px;
 `;
 
+const validate = values => {
+  const errors = {};
+  if (values.password !== values.passwordCheck) {
+    errors.passwordCheck = 'Passwords much match!';
+  }
+  return errors;
+};
+
 ResetPasswordForm = reduxForm({
-  form: 'resetPassword'
+  form: 'resetPassword',
+  validate
 })(ResetPasswordForm);
 
 function mapStateToProps({ errors }) {

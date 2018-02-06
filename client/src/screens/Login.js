@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-
+import { Link } from 'react-router-dom';
 import LoginForm from '../components/auth/LoginForm';
 
 class Login extends Component {
@@ -46,9 +46,7 @@ class Login extends Component {
               <div className="card-content white-text">
                 <span className="card-title">Login</span>
                 <LoginForm />
-                <a href="/auth/resetPassword" className="btn">
-                  Reset Password
-                </a>
+                <Link to="/forgotPassword">Forgot Password</Link>
               </div>
             </div>
           </div>

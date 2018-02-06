@@ -59,6 +59,26 @@ export const localLogin = (
   }
 };
 
+export const resetPassword = (password, token, history) => async dispatch => {
+  dispatch({ type: CLIENT_ERRORS, payload: null }); // reset errors.
+  try {
+    const res = await axios.post(`/auth/resetPassword/${token}`, { password });
+    const { user } = res.data;
+    if (user) {
+      dispatch({
+        type: FETCH_USER,
+        payload: user
+      });
+      history.push('/');
+    }
+  } catch ({ response }) {
+    dispatch({
+      type: CLIENT_ERRORS,
+      payload: response.data
+    });
+  }
+};
+
 export const fetchUser = () => async dispatch => {
   const res = await axios.get('/api/current_user');
   dispatch({ type: FETCH_USER, payload: res.data });

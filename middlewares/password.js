@@ -4,6 +4,7 @@ var crypto = require('crypto');
 
 const Mailer = require('../services/Mailer');
 const resetPasswordTemplate = require('../services/emailTemplates/resetPassword');
+const passwordWasReset = require('../services/emailTemplates/passwordWasReset');
 
 module.exports = {
   forgot: async (req, res, next) => {
@@ -49,6 +50,11 @@ module.exports = {
   reset: async (req, res, next) => {
     const { token } = req.params;
     const { password } = req.body;
+    const mailConfig = {
+      subject: 'Host Legality - Your password was reset',
+      recipients: [{ email: 'drew.m.peterson@gmail.com' }]
+    };
+
     if (!password) {
       return next('Please provide a password in order to reset');
     }
@@ -64,9 +70,17 @@ module.exports = {
 
       try {
         const res = await user.save();
-        req.logIn(user, function(err) {
-          return next(err, user);
-        });
+        // user already logged in...
+        if (!req.user) {
+          req.logIn(user, function(err) {
+            return next(err, user);
+          });
+        }
+        // send email
+        next(null, res);
+        const mailer = new Mailer(mailConfig, passwordWasReset(user));
+        mailer.send();
+        return;
       } catch (err) {
         return next(err);
       }

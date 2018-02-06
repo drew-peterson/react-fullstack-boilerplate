@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Input = ({
   input,
@@ -18,8 +18,7 @@ const Input = ({
           type={type}
           id={input.name}
         />
-        {touched ||
-          (error && <div className="red-text">{touched && error}</div>)}
+        {touched && error && <div className="red-text">{error}</div>}
       </div>
     </div>
   );

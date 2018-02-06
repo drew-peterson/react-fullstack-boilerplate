@@ -59,12 +59,12 @@ module.exports = app => {
   });
 
   app.post('/auth/resetPassword/:token', password.reset, (req, res) => {
-    console.log('RESET COMPLETE....');
     res.status(200).send({ user: req.user });
   });
 
   app.post('/auth/forgotPassword', password.forgot, (req, res) => {
-    console.log('FORGOT PASSWORD...');
-    res.status(200).send('Check Email for password reset link...');
+    res
+      .status(200)
+      .send(`Password reset link was sent to email: ${req.body.email}`);
   });
 };

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import ResetPasswordForm from '../components/auth/ResetPasswordForm';
+import ForgotPasswordForm from '../components/auth/ForgotPasswordForm';
 
-class ResetPassword extends Component {
+class ForgotPassword extends Component {
   render() {
     return (
       <Container>
-        <h2>Reset Password</h2>
-        <ResetPasswordForm />
+        <h2>Forgot Password</h2>
+        <ForgotPasswordForm />
       </Container>
     );
   }
@@ -18,4 +18,4 @@ const Container = styled.div`
   text-align: center;
 `;
 
-export default ResetPassword;
+export default ForgotPassword;
