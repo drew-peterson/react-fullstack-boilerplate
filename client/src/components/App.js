@@ -19,6 +19,7 @@ class App extends Component {
   // preferred location for intial ajax request w/ new react
   // componentDidMount() {
   componentWillMount() {
+    console.log('will mount');
     this.props.fetchUser(); // check auth...
   }
 
